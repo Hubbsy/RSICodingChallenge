@@ -23,7 +23,6 @@ export default function MainSearch() {
 
             <Box sx={{justifyContent: "start", display: "flex"}}>
                 <SearchBar sx={{width: {xs: "65%", sm: "40%"}}}>
-                    {/*<SearchIcon sx={{color: "text.secondary"}}/>*/}
                     <InputBase startAdornment={<SearchIcon sx={{color: "text.secondary"}}/>}/>
                 </SearchBar>
                 <Button sx={{marginLeft: 3}} color={"secondary"} variant={"outlined"} startIcon={<ManageSearchIcon/>}>Search</Button>

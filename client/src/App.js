@@ -5,7 +5,7 @@ import theme from './Theme';
 
 import Navbar from "./components/Navbar";
 import MainSearch from "./components/MainSearch";
-import MainContent from "./components/MainContent";
+import MainContent from "./components/mainContent/MainContent";
 
 function App() {
 
