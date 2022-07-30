@@ -1,8 +1,6 @@
 import React from "react";
 import {Box, Breadcrumbs, Link, styled, Typography} from "@mui/material";
-import {useTheme} from "@mui/material/styles";
 import {Home} from '@mui/icons-material';
-
 
 export default function Navbar() {
 

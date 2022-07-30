@@ -17,7 +17,7 @@ function App() {
           height: "100%",
           backgroundColor: theme.palette.background.default,
           padding: "20px"
-      }} spacing={1}>
+      }} spacing={2}>
 
         <Navbar />
         <MainSearch />
