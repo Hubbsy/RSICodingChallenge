@@ -37,7 +37,7 @@ export default function Toolbar() {
 
     return (
         <SearchBox elevation={2}>
-            <SearchBar sx={{width: {xs: "50%", sm: "30%"}} }>
+            <SearchBar sx={{width: {xs: "50%", sm: "25%"}} }>
                 <InputBase fullWidth={true} placeholder={"Search"} startAdornment={<SearchIcon sx={{color: "text.secondary"}}/>} endAdornment={<CloseIcon sx={{color: "text.secondary"}} fontSize={"small"}/>}/>
             </SearchBar>
             <ToolBox sx={{width: {xs: "30%", sm: "15%"}, color: "text.secondary"} }>
