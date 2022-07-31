@@ -1,8 +1,7 @@
 import React from "react";
-import MaterialTable, { MTableToolbar } from "@material-table/core";
+import MaterialTable from "@material-table/core";
 import Data from "../data";
-import {useTheme} from "@mui/material";
-import {makeStyles} from "@mui/material/styles";
+import {TablePagination, useTheme} from "@mui/material";
 
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -37,8 +36,7 @@ export default function Table({showData}) {
         {title: "Proc State", field: "PROCESSEDSTATE"},
     ]
 
-    const fields = [];
-    Data.map((record) => {
+    const fields = Data.map((record) => {
         let transaction = record.PARTA_TRANSACTION;
         let mappedData = {};
         for (let key in transaction) {
@@ -53,7 +51,7 @@ export default function Table({showData}) {
             }
         }
 
-        fields.push(mappedData)
+        return mappedData
     });
 
     const actions = [
@@ -95,15 +93,24 @@ export default function Table({showData}) {
     const options = {
         headerStyle: {
             backgroundColor:  theme.palette.secondary.dark,
-            color: theme.palette.background.paper
+            color: theme.palette.background.paper,
+            textTransform: "capitalize",
+            padding: 15
         },
 
-        showEmptyDataSourceMessage: true
+        showEmptyDataSourceMessage: true,
     }
 
-
-
     return (
-        <MaterialTable columns={columns} data={showData ? fields : []} title={""} actions={actions} options={options} />
+        <MaterialTable columns={columns} data={showData ? fields : []} title={""} actions={actions} options={options} components={{
+            Pagination: (props) =>
+                <TablePagination
+                    count={props.count}
+                    page={props.page}
+                    onPageChange={props.onPageChange}
+                    rowsPerPage={props.rowsPerPage}
+                    onRowsPerPageChange={props.onRowsPerPageChange}
+                />
+        }}/>
     )
 }

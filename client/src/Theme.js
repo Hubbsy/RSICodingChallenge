@@ -179,10 +179,48 @@ const theme = createTheme({
         MuiToolbar: {
             defaultProps: {
                 disableGutters: true,
-                paddingRight: 0,
-                paddingLeft: 0
             }
-        }
+        },
+        MuiInput: {
+            styleOverrides: {
+                root: {
+                    marginRight: 10,
+                    "&:after": {
+                        borderBottom: "black"
+                    },
+                }
+            }
+        },
+        MuiTableSortLabel: {
+            styleOverrides: {
+                root: {
+                    color: '#FFFFFF',
+                    '&:hover': {
+                        color: '#0097FB',
+                    },
+                    '&:focus': {
+                        color: '#0097FB',
+                    },
+                    '&:after': {
+                        color: '#FFFFFF',
+                    },
+                    '&:before': {
+                        color: '#FFFFFF',
+                    },
+                }
+            },
+            active: {
+                color: '#0097FB',
+            },
+        },
+        MuiTablePagination: {
+            defaultProps: {
+                rowsPerPageOptions: [5,10,50],
+            },
+            root: {
+                textTransform: "capitalize"
+            }
+        },
     }
 })
 

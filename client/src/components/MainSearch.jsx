@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Button, Container, InputBase, Paper, styled, Typography} from "@mui/material";
+import {Box, Button, InputBase, Paper, styled, Typography} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
