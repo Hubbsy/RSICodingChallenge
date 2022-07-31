@@ -175,7 +175,15 @@ const theme = createTheme({
     },
     transitions: {},
     zIndex: {},
-    components: {}
+    components: {
+        MuiToolbar: {
+            defaultProps: {
+                disableGutters: true,
+                paddingRight: 0,
+                paddingLeft: 0
+            }
+        }
+    }
 })
 
 export default theme;

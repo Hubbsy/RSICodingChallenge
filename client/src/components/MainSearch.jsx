@@ -3,7 +3,7 @@ import {Box, Button, Container, InputBase, Paper, styled, Typography} from "@mui
 import SearchIcon from '@mui/icons-material/Search';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
-export default function MainSearch() {
+export default function MainSearch({setShowData}) {
 
     const SearchBox = styled(Paper)(({theme}) => ({
         backgroundColor: theme.palette.background.paper,
@@ -25,7 +25,7 @@ export default function MainSearch() {
                 <SearchBar sx={{width: {xs: "65%", sm: "40%"}}}>
                     <InputBase startAdornment={<SearchIcon sx={{color: "text.secondary"}}/>}/>
                 </SearchBar>
-                <Button sx={{marginLeft: 3}} color={"secondary"} variant={"outlined"} startIcon={<ManageSearchIcon/>}>Search</Button>
+                <Button onClick={() => setShowData(true)} sx={{marginLeft: 3}} color={"secondary"} variant={"outlined"} startIcon={<ManageSearchIcon/>}>Search</Button>
             </Box>
         </SearchBox>
     )

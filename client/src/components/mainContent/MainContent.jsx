@@ -1,7 +1,7 @@
 import React from "react";
 import {Box, styled} from "@mui/material";
 
-import Toolbar from "./subContent/Toolbar";
+import Table from "./Table";
 
 export default function MainContent() {
 
@@ -11,7 +11,7 @@ export default function MainContent() {
 
     return (
        <MainContentBox>
-           <Toolbar />
+           <Table/>
        </MainContentBox>
     )
 
