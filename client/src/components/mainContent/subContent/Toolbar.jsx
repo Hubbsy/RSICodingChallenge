@@ -11,7 +11,7 @@ import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 export default function Toolbar() {
 
-    const SearchBox = styled(Paper)(({theme}) => ({
+    const ToolbarContent = styled(Paper)(({theme}) => ({
         backgroundColor: theme.palette.background.paper,
         display: "flex",
         justifyContent: "end",
@@ -36,7 +36,7 @@ export default function Toolbar() {
     }))
 
     return (
-        <SearchBox elevation={2}>
+        <ToolbarContent elevation={2}>
             <SearchBar sx={{width: {xs: "50%", sm: "25%"}} }>
                 <InputBase fullWidth={true} placeholder={"Search"} startAdornment={<SearchIcon sx={{color: "text.secondary", marginRight: 1}}/>} endAdornment={<CloseIcon sx={{color: "text.secondary"}} fontSize={"small"}/>}/>
             </SearchBar>
@@ -46,7 +46,7 @@ export default function Toolbar() {
                 <FilterListIcon/>
                 <ViewHeadlineIcon/>
             </ToolBox>
-        </SearchBox>
+        </ToolbarContent>
 
     )
 
