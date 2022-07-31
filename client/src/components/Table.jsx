@@ -30,7 +30,7 @@ export default function Table({showData}) {
         for (let key in transaction) {
 
             if (tableFields.hasOwnProperty(key)) {
-                if (transaction[key] === null) {
+                if (transaction[key] === null || !transaction[key]) {
                     mappedData[key] = "N/A";
                 }
                 else {

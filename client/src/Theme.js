@@ -229,7 +229,7 @@ const theme = createTheme({
         },
         MuiTablePagination: {
             defaultProps: {
-                rowsPerPageOptions: [5,10,50],
+                rowsPerPageOptions: [10, 25, 50, 100]
             },
             styleOverrides: {
                 select: {
