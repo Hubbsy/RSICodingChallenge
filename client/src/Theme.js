@@ -187,7 +187,14 @@ const theme = createTheme({
                     marginRight: 10,
                     "&:after": {
                         borderBottom: "black"
-                    },
+                    }
+                }
+            }
+        },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    width: "30%"
                 }
             }
         },
@@ -213,13 +220,43 @@ const theme = createTheme({
                 color: '#0097FB',
             },
         },
+        MuiTable: {
+            styleOverrides: {
+                root: {
+                    minHeight: "auto"
+                }
+            },
+        },
         MuiTablePagination: {
             defaultProps: {
                 rowsPerPageOptions: [5,10,50],
             },
-            root: {
-                textTransform: "capitalize"
+            styleOverrides: {
+                select: {
+                    padding: 0,
+                },
+                selectLabel: {
+                    textTransform: "capitalize",
+                    fontFamily: 'Roboto',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    lineHeight: '166%',
+                    letterSpacing: '0.4px',
+                    color: "gray"
+                },
+                selectIcon: {
+                    paddingBottom: 5,
+                },
+                displayedRows: {
+                    textTransform: "lowercase",
+                    fontFamily: 'Roboto',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    lineHeight: '166%',
+                    letterSpacing: '0.4px',
+                }
             }
+
         },
     }
 })

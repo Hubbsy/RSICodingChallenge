@@ -9,6 +9,7 @@ import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
 export default function Table({showData}) {
+    const theme = useTheme();
 
     const tableFields = {
         "AFFIDAVITNO":true,
@@ -22,19 +23,6 @@ export default function Table({showData}) {
         "RECEIVEDATE":true,
         "PROCESSEDSTATE":true,
     }
-
-    const columns = [
-        {title: "Affidavit No", field: "AFFIDAVITNO"},
-        {title: "Policy No", field: "POLICYNO"},
-        {title: "Insured Name", field: "RISKINSUREDNAME"},
-        {title: "Type", field: "TRANSACTIONTYPE"},
-        {title: "Premium", field: "AMOUNT"},
-        {title: "inception", field: "EFFECTIVEDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Expiration", field: "EXPIRATIONDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Batch", field: "BATCHID", type: "numeric"},
-        {title: "Submitted", field: "RECEIVEDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Proc State", field: "PROCESSEDSTATE"},
-    ]
 
     const fields = Data.map((record) => {
         let transaction = record.PARTA_TRANSACTION;
@@ -53,6 +41,19 @@ export default function Table({showData}) {
 
         return mappedData
     });
+
+    const columns = [
+        {title: "Affidavit No", field: "AFFIDAVITNO"},
+        {title: "Policy No", field: "POLICYNO"},
+        {title: "Insured Name", field: "RISKINSUREDNAME"},
+        {title: "Type", field: "TRANSACTIONTYPE"},
+        {title: "Premium", field: "AMOUNT"},
+        {title: "inception", field: "EFFECTIVEDATE", type: 'date', format: "mm/dd/yyyy"},
+        {title: "Expiration", field: "EXPIRATIONDATE", type: 'date', format: "mm/dd/yyyy"},
+        {title: "Batch", field: "BATCHID", type: "numeric"},
+        {title: "Submitted", field: "RECEIVEDATE", type: 'date', format: "mm/dd/yyyy"},
+        {title: "Proc State", field: "PROCESSEDSTATE"},
+    ]
 
     const actions = [
         {
@@ -89,10 +90,9 @@ export default function Table({showData}) {
         },
     ];
 
-    const theme = useTheme();
     const options = {
         headerStyle: {
-            backgroundColor:  theme.palette.secondary.dark,
+            backgroundColor:  theme.palette.grid.main.header,
             color: theme.palette.background.paper,
             textTransform: "capitalize",
             padding: 15
