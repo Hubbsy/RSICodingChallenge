@@ -8,7 +8,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
-export default function Table({showData}) {
+export default function Table({showData, customRows}) {
     const theme = useTheme();
 
     const tableFields = {
@@ -42,12 +42,25 @@ export default function Table({showData}) {
         return mappedData
     });
 
+    const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    })
+
     const columns = [
         {title: "Affidavit No", field: "AFFIDAVITNO"},
         {title: "Policy No", field: "POLICYNO"},
-        {title: "Insured Name", field: "RISKINSUREDNAME"},
+        {title: "Insured Name", field: "RISKINSUREDNAME", render: (rowData) => {
+            let shortenedName = rowData.RISKINSUREDNAME;
+            if (rowData.RISKINSUREDNAME.length > 20) {
+                shortenedName = `${shortenedName.slice(19)} ...`
+            }
+            return shortenedName
+            }},
         {title: "Type", field: "TRANSACTIONTYPE"},
-        {title: "Premium", field: "AMOUNT"},
+        {title: "Premium", field: "AMOUNT", render: (rowData) => {
+                return floatToDollarsConverter.format(rowData.AMOUNT)
+            }},
         {title: "inception", field: "EFFECTIVEDATE", type: 'date', format: "mm/dd/yyyy"},
         {title: "Expiration", field: "EXPIRATIONDATE", type: 'date', format: "mm/dd/yyyy"},
         {title: "Batch", field: "BATCHID", type: "numeric"},
@@ -97,6 +110,7 @@ export default function Table({showData}) {
             textTransform: "capitalize",
             padding: 15
         },
+        pageSize: 10,
 
         showEmptyDataSourceMessage: true,
     }
