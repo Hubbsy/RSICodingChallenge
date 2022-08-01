@@ -8,7 +8,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 
-export default function Table({showData, customRows}) {
+export default function Table({showData}) {
     const theme = useTheme();
 
     const tableFields = {
@@ -53,7 +53,7 @@ export default function Table({showData, customRows}) {
         {title: "Insured Name", field: "RISKINSUREDNAME", render: (rowData) => {
             let shortenedName = rowData.RISKINSUREDNAME;
             if (rowData.RISKINSUREDNAME.length > 20) {
-                shortenedName = `${shortenedName.slice(19)} ...`
+                shortenedName = `${shortenedName.slice(0, 19)} ...`
             }
             return shortenedName
             }},

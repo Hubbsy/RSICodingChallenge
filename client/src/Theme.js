@@ -227,6 +227,15 @@ const theme = createTheme({
                 }
             },
         },
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "clip",
+                }
+            }
+        },
         MuiTablePagination: {
             defaultProps: {
                 rowsPerPageOptions: [10, 25, 50, 100],
