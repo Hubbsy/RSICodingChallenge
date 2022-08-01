@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import MaterialTable from "@material-table/core";
 import Data from "../data";
-import {TablePagination, useTheme} from "@mui/material";
+import {styled, TablePagination, useTheme} from "@mui/material";
 
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -11,6 +11,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default function Table({showData}) {
     const theme = useTheme();
+
+    const [selectedRow, setSelectedRow] = useState(null);
 
     const tableFields = {
         "AFFIDAVITNO":true,
@@ -72,6 +74,18 @@ export default function Table({showData}) {
             }, cellStyle: {textAlign: "center"}},
     ]
 
+    // const StyledMoreVertIcon = styled(MoreVertIcon)(({theme}) => ({
+    //     height: 20,
+    //     color: "gray",
+    //     "&:hover": {
+    //         height: 20,
+    //         borderRadius: "50%",
+    //         backgroundColor: theme.palette.grid.main.active,
+    //         padding: 0,
+    //         color: "text.secondary"
+    //     }
+    // }))
+
     const actions = [
         {
             icon: ViewColumnIcon,
@@ -109,7 +123,7 @@ export default function Table({showData}) {
             icon: MoreVertIcon,
             tooltip: 'Show Details',
             onClick: (event, rowData) => {
-                // Do save operation
+                setSelectedRow(rowData.tableData.id);
             }
         }
     ];
@@ -124,10 +138,19 @@ export default function Table({showData}) {
             textTransform: "capitalize",
             padding: 15,
         },
+        rowStyle: (rowData) => ({
+            backgroundColor:
+                selectedRow === rowData.tableData.id ? theme.palette.success.light : theme.palette.background.paper
+        })
+
+    }
+
+    const handleRowClick = (event, selectedRow) => {
+        setSelectedRow(selectedRow.tableData.id);
     }
 
     return (
-        <MaterialTable columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} components={{
+        <MaterialTable columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} onRowClick={handleRowClick} components={{
             Pagination: (props) =>
                 <TablePagination
                     count={props.count}
