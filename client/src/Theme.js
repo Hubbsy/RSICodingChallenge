@@ -203,28 +203,21 @@ const theme = createTheme({
                 root: {
                     color: '#FFFFFF',
                     '&:hover': {
-                        color: '#0097FB',
+                        color: '#FFFFFF',
                     },
                     '&:focus': {
-                        color: '#0097FB',
-                    },
-                    '&:after': {
                         color: '#FFFFFF',
                     },
                     '&:before': {
                         color: '#FFFFFF',
                     },
-                }
-            },
-            active: {
-                color: '#0097FB',
-            },
-        },
-        MuiTable: {
-            styleOverrides: {
-                root: {
-                    minHeight: "auto"
-                }
+                    '&:after': {
+                        color: '#FFFFFF',
+                    },
+                    "&:disabled": {
+                        color: '#FFFFFF',
+                    },
+                },
             },
         },
         MuiTableRow: {
@@ -237,9 +230,6 @@ const theme = createTheme({
             }
         },
         MuiTablePagination: {
-            defaultProps: {
-                rowsPerPageOptions: [10, 25, 50, 100],
-            },
             styleOverrides: {
                 select: {
                     padding: 0,

@@ -7,6 +7,7 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default function Table({showData}) {
     const theme = useTheme();
@@ -52,8 +53,8 @@ export default function Table({showData}) {
         {title: "Policy No", field: "POLICYNO"},
         {title: "Insured Name", field: "RISKINSUREDNAME", render: (rowData) => {
             let shortenedName = rowData.RISKINSUREDNAME;
-            if (rowData.RISKINSUREDNAME.length > 20) {
-                shortenedName = `${shortenedName.slice(0, 19)} ...`
+            if (rowData.RISKINSUREDNAME.length > 25) {
+                shortenedName = `${shortenedName.slice(0, 23)} ...`
             }
             return shortenedName
             }},
@@ -65,7 +66,10 @@ export default function Table({showData}) {
         {title: "Expiration", field: "EXPIRATIONDATE", type: 'date', format: "mm/dd/yyyy"},
         {title: "Batch", field: "BATCHID", type: "numeric"},
         {title: "Submitted", field: "RECEIVEDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Proc State", field: "PROCESSEDSTATE"},
+        {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {
+                width: "10px",
+                maxWidth: "calc(5px)"
+            }, cellStyle: {textAlign: "center"}},
     ]
 
     const actions = [
@@ -101,30 +105,39 @@ export default function Table({showData}) {
                 alert("how about it!")
             }
         },
+        {
+            icon: MoreVertIcon,
+            tooltip: 'Show Details',
+            onClick: (event, rowData) => {
+                // Do save operation
+            }
+        }
     ];
 
     const options = {
+        pageSize: 10,
+        showEmptyDataSourceMessage: true,
+        actionsColumnIndex: -1,
         headerStyle: {
             backgroundColor:  theme.palette.grid.main.header,
             color: theme.palette.background.paper,
             textTransform: "capitalize",
-            padding: 15
+            padding: 15,
         },
-        pageSize: 10,
-
-        showEmptyDataSourceMessage: true,
     }
 
     return (
-        <MaterialTable columns={columns} data={showData ? fields : []} title={""} actions={actions} options={options} components={{
+        <MaterialTable columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} components={{
             Pagination: (props) =>
                 <TablePagination
                     count={props.count}
                     page={props.page}
                     onPageChange={props.onPageChange}
                     rowsPerPage={props.rowsPerPage}
+                    rowsPerPageOptions={[10, 25, 50, 100]}
                     onRowsPerPageChange={props.onRowsPerPageChange}
                 />
-        }}/>
+            }}
+        />
     )
 }
