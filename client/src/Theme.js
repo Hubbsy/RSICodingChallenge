@@ -181,8 +181,25 @@ const theme = createTheme({
                 disableGutters: true,
             }
         },
-        MuiTableSortLabel: {
+        MuiTooltip: {
+            defaultProps: {
+                placement: "top",
+                arrow: true,
+            },
+        },
+        MuiFormControl: {
             styleOverrides: {
+                root: {
+                    width: "30%"
+                }
+            }
+        },
+        MuiTableSortLabel: {
+            defaultProps: {
+                active: false,
+            },
+            styleOverrides: {
+
                 root: {
                     color: '#FFFFFF',
                     '&:hover': {
@@ -199,16 +216,15 @@ const theme = createTheme({
                     },
                     "&:disabled": {
                         color: '#FFFFFF',
-                    },
+                    }
                 },
+
             },
         },
         MuiTableRow: {
             styleOverrides: {
                 root: {
                     whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "clip",
                 }
             }
         },
@@ -238,7 +254,6 @@ const theme = createTheme({
                     letterSpacing: '0.4px',
                 }
             }
-
         },
     }
 })

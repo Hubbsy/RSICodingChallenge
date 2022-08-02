@@ -1,43 +1,25 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import MaterialTable from "@material-table/core";
 import Data from "../data";
-import RowPopover from "./Popover";
-import { ExportCsv, ExportPdf } from "@material-table/exporters";
 
-import {TablePagination,  useTheme} from "@mui/material";
+import { ExportCsv, ExportPdf } from "@material-table/exporters";
+import {FormControl, Input, InputAdornment, TablePagination, useTheme} from "@mui/material";
 
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Popover from "@mui/material/Popover";
-import Typography from "@mui/material/Typography";
 
 export default function Table({showData}) {
     const theme = useTheme();
 
     const [selectedRow, setSelectedRow] = useState(null);
-    const [activeRowData, setActiveRowData] = useState({});
-    const tableRef = useRef(null);
-    const [anchorEl, setAnchorEl] = useState(null);
-
     const [activeFilter, setActiveFilter] = useState(false);
 
-    // useEffect(() => {
-    //     setTimeout(() => setAnchorEl(anchorRef?.current), 1)
-    // }, [anchorRef])
-
-    const handleClick = (e, rowData) => {
-        setAnchorEl(e.currentTarget);
-        setSelectedRow(rowData.tableData.id);
-        setActiveRowData(rowData);
+    const handleRowClick = (event, selectedRow) => {
+        setSelectedRow(selectedRow.tableData.id);
     }
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? "simple-popover" : undefined;
+    /////////// Process Data for Column Fields
 
     const tableFields = {
         "AFFIDAVITNO":true,
@@ -70,46 +52,12 @@ export default function Table({showData}) {
         return mappedData
     });
 
-    const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    })
-
-    const columns = [
-        {title: "Affidavit No", field: "AFFIDAVITNO"},
-        {title: "Policy No", field: "POLICYNO"},
-        {title: "Insured Name", field: "RISKINSUREDNAME", render: (rowData) => {
-            let shortenedName = rowData.RISKINSUREDNAME;
-            if (rowData.RISKINSUREDNAME.length > 25) {
-                shortenedName = `${shortenedName.slice(0, 23)} ...`
-            }
-            return shortenedName
-            }},
-        {title: "Type", field: "TRANSACTIONTYPE"},
-        {title: "Premium", field: "AMOUNT", render: (rowData) => {
-                return floatToDollarsConverter.format(rowData.AMOUNT)
-            }},
-        {title: "inception", field: "EFFECTIVEDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Expiration", field: "EXPIRATIONDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Batch", field: "BATCHID", type: "numeric"},
-        {title: "Submitted", field: "RECEIVEDATE", type: 'date', format: "mm/dd/yyyy"},
-        {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {
-                width: "10px",
-                maxWidth: "calc(5px)"
-            }, cellStyle: {textAlign: "center"}},
-        // {
-        //     title: "Custom Add",
-        //     field: "internal_action",
-        //     render: () => (
-        //             <TestButton editable={false}/>
-        //         )
-        // }
-    ]
+    /////////// Actions array for table action icons
 
     const actions = [
         {
             icon: FilterListIcon,
-            tooltip: "Filter List",
+            tooltip: "Show Filters",
             isFreeAction: true,
             onClick: (event, rowData) => {
                 setActiveFilter(!activeFilter);
@@ -118,47 +66,32 @@ export default function Table({showData}) {
         },
         {
             icon: ViewHeadlineIcon,
-            tooltip: "View Rows",
+            tooltip: "Toggle Density",
             isFreeAction: true,
+            onClick: (event, rowData) => {
+                options.setTableProps();
+            }
 
         },
         {
             icon: MoreVertIcon,
-            tooltip: 'Show Details',
-            onClick: handleClick
+            tooltip: 'Toggle Details',
+            onClick: (event, rowData) => {
+
+            }
         }
     ];
 
-    function RowPopover({anchorEl}) {
-
-        return (
-            <div >
-                {anchorEl && <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                >
-                    <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-                </Popover>}
-
-            </div>
-        );
-    }
-
-    const handleRowClick = (event, selectedRow) => {
-        setSelectedRow(selectedRow.tableData.id);
-    }
+    /////////// Options object for table customization
 
     const options = {
+        setTableProps: () => {
+            console.log("setting Props!!!!")
+            return {
+                size: 'small',
+            };
+        },
+        size: "medium",
         pageSize: 10,
         showEmptyDataSourceMessage: true,
         actionsColumnIndex: -1,
@@ -175,23 +108,88 @@ export default function Table({showData}) {
         exportAllData: true,
         exportMenu: [
             {
-                label: "Export PDF",
+                label: "Export as PDF",
                 exportFunc: (cols, datas) =>
-                    ExportPdf(cols, datas, "newPDF"),
+                    ExportPdf(cols, datas, "RSIData"),
             },
             {
-                label: "Export CSV",
+                label: "Export as CSV",
                 exportFunc: (cols, datas) =>
-                    ExportCsv(cols, datas, "newCSV"),
+                    ExportCsv(cols, datas, "RSIData"),
             },
         ],
         columnsButton: true,
         filtering: activeFilter,
     }
 
+    /////////// Columns Rendering and helpers
+
+    const CustomColumnFilter = (props) => {
+        return (
+            <FormControl variant="standard" sx={{width: "100%"}}>
+                <Input
+                    onChange={(event) => {
+                        props.onFilterChanged(props.columnDef.tableData.id, event.target.value);
+                    }}
+                    id="input-with-icon-adornment"
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <FilterListIcon />
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
+        )
+    }
+
+    const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    })
+
+    const columns = [
+        {title: "Affidavit No", field: "AFFIDAVITNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {title: "Policy No", field: "POLICYNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {title: "Insured Name", field: "RISKINSUREDNAME", filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                let shortenedName = rowData.RISKINSUREDNAME;
+                if (rowData.RISKINSUREDNAME.length > 25) {
+                    shortenedName = `${shortenedName.slice(0, 23)} ...`
+                }
+                return shortenedName
+            }},
+
+        {title: "Type", field: "TRANSACTIONTYPE", filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {title: "Premium", field: "AMOUNT", type: "currency", render: (rowData) => {
+                return floatToDollarsConverter.format(rowData.AMOUNT)
+            }, filterComponent: (props) => <CustomColumnFilter {...props} />},
+
+        {title: "Inception", field: "EFFECTIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+            }},
+
+        {title: "Expiration", field: "EXPIRATIONDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+            }},
+
+        {title: "Batch", field: "BATCHID", type: "numeric", filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {title: "Submitted", field: "RECEIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+            }},
+
+        {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {
+                width: "10px",
+                maxWidth: "calc(5px)"
+            }, cellStyle: {textAlign: "center"}, filterComponent: (props) => <CustomColumnFilter {...props} />},
+
+    ]
+
     return (
         <>
-            <MaterialTable ref={tableRef} columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} onRowClick={handleRowClick} components={{
+            <MaterialTable columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} onRowClick={handleRowClick} components={{
                 Pagination: (props) =>
                     <TablePagination
                         count={props.count}
@@ -200,11 +198,10 @@ export default function Table({showData}) {
                         rowsPerPage={props.rowsPerPage}
                         rowsPerPageOptions={[10, 25, 50, 100]}
                         onRowsPerPageChange={props.onRowsPerPageChange}
-                    />,
+                    />
             }}
 
             />
-            <RowPopover anchorEl={anchorEl}/>
         </>
 
     )
