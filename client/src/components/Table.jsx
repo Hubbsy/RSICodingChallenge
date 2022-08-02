@@ -1,18 +1,43 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import MaterialTable from "@material-table/core";
 import Data from "../data";
-import {styled, TablePagination, useTheme} from "@mui/material";
+import RowPopover from "./Popover";
+import { ExportCsv, ExportPdf } from "@material-table/exporters";
 
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import {TablePagination,  useTheme} from "@mui/material";
+
 import FilterListIcon from '@mui/icons-material/FilterList';
-import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
 
 export default function Table({showData}) {
     const theme = useTheme();
 
     const [selectedRow, setSelectedRow] = useState(null);
+    const [activeRowData, setActiveRowData] = useState({});
+    const tableRef = useRef(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const [activeFilter, setActiveFilter] = useState(false);
+
+    // useEffect(() => {
+    //     setTimeout(() => setAnchorEl(anchorRef?.current), 1)
+    // }, [anchorRef])
+
+    const handleClick = (e, rowData) => {
+        setAnchorEl(e.currentTarget);
+        setSelectedRow(rowData.tableData.id);
+        setActiveRowData(rowData);
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? "simple-popover" : undefined;
 
     const tableFields = {
         "AFFIDAVITNO":true,
@@ -72,61 +97,66 @@ export default function Table({showData}) {
                 width: "10px",
                 maxWidth: "calc(5px)"
             }, cellStyle: {textAlign: "center"}},
+        // {
+        //     title: "Custom Add",
+        //     field: "internal_action",
+        //     render: () => (
+        //             <TestButton editable={false}/>
+        //         )
+        // }
     ]
 
-    // const StyledMoreVertIcon = styled(MoreVertIcon)(({theme}) => ({
-    //     height: 20,
-    //     color: "gray",
-    //     "&:hover": {
-    //         height: 20,
-    //         borderRadius: "50%",
-    //         backgroundColor: theme.palette.grid.main.active,
-    //         padding: 0,
-    //         color: "text.secondary"
-    //     }
-    // }))
-
     const actions = [
-        {
-            icon: ViewColumnIcon,
-            tooltip: "View Columns",
-            isFreeAction: true,
-            onClick: (e) => {
-                alert("how about it!")
-            }
-        },
-        {
-            icon: SaveAltIcon,
-            tooltip: "Export",
-            isFreeAction: true,
-            onClick: (e) => {
-                alert("how about it!")
-            }
-        },
         {
             icon: FilterListIcon,
             tooltip: "Filter List",
             isFreeAction: true,
-            onClick: (e) => {
-                alert("how about it!")
+            onClick: (event, rowData) => {
+                setActiveFilter(!activeFilter);
             }
+
         },
         {
             icon: ViewHeadlineIcon,
             tooltip: "View Rows",
             isFreeAction: true,
-            onClick: (e) => {
-                alert("how about it!")
-            }
+
         },
         {
             icon: MoreVertIcon,
             tooltip: 'Show Details',
-            onClick: (event, rowData) => {
-                setSelectedRow(rowData.tableData.id);
-            }
+            onClick: handleClick
         }
     ];
+
+    function RowPopover({anchorEl}) {
+
+        return (
+            <div >
+                {anchorEl && <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+                </Popover>}
+
+            </div>
+        );
+    }
+
+    const handleRowClick = (event, selectedRow) => {
+        setSelectedRow(selectedRow.tableData.id);
+    }
 
     const options = {
         pageSize: 10,
@@ -141,26 +171,41 @@ export default function Table({showData}) {
         rowStyle: (rowData) => ({
             backgroundColor:
                 selectedRow === rowData.tableData.id ? theme.palette.success.light : theme.palette.background.paper
-        })
-
-    }
-
-    const handleRowClick = (event, selectedRow) => {
-        setSelectedRow(selectedRow.tableData.id);
+        }),
+        exportAllData: true,
+        exportMenu: [
+            {
+                label: "Export PDF",
+                exportFunc: (cols, datas) =>
+                    ExportPdf(cols, datas, "newPDF"),
+            },
+            {
+                label: "Export CSV",
+                exportFunc: (cols, datas) =>
+                    ExportCsv(cols, datas, "newCSV"),
+            },
+        ],
+        columnsButton: true,
+        filtering: activeFilter,
     }
 
     return (
-        <MaterialTable columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} onRowClick={handleRowClick} components={{
-            Pagination: (props) =>
-                <TablePagination
-                    count={props.count}
-                    page={props.page}
-                    onPageChange={props.onPageChange}
-                    rowsPerPage={props.rowsPerPage}
-                    rowsPerPageOptions={[10, 25, 50, 100]}
-                    onRowsPerPageChange={props.onRowsPerPageChange}
-                />
+        <>
+            <MaterialTable ref={tableRef} columns={columns} data={showData ? fields : []} title={""} localization={{header : {actions: ''}}} actions={actions} options={options} onRowClick={handleRowClick} components={{
+                Pagination: (props) =>
+                    <TablePagination
+                        count={props.count}
+                        page={props.page}
+                        onPageChange={props.onPageChange}
+                        rowsPerPage={props.rowsPerPage}
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        onRowsPerPageChange={props.onRowsPerPageChange}
+                    />,
             }}
-        />
+
+            />
+            <RowPopover anchorEl={anchorEl}/>
+        </>
+
     )
 }

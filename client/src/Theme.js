@@ -181,23 +181,6 @@ const theme = createTheme({
                 disableGutters: true,
             }
         },
-        MuiInput: {
-            styleOverrides: {
-                root: {
-                    marginRight: 10,
-                    "&:after": {
-                        borderBottom: "black"
-                    }
-                }
-            }
-        },
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    width: "30%"
-                }
-            }
-        },
         MuiTableSortLabel: {
             styleOverrides: {
                 root: {
