@@ -211,12 +211,6 @@ const theme = createTheme({
                     '&:focus': {
                         color: '#FFFFFF',
                     },
-                    '&:before': {
-                        color: '#FFFFFF',
-                    },
-                    '&:after': {
-                        color: '#FFFFFF',
-                    }
                 },
                 active: {},
                 icon: {

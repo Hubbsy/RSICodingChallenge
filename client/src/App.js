@@ -5,7 +5,7 @@ import theme from './Theme';
 
 import Navbar from "./components/Navbar";
 import MainSearch from "./components/MainSearch";
-import Table from "./components/Table";
+import Table from "./components/table/Table";
 import {useState} from "react";
 
 function App() {

@@ -2,41 +2,6 @@ import {FormControl, Input, InputAdornment} from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import React from "react";
 
-const CustomColumnFilter = (props) => {
-    return (
-        <FormControl variant="standard" sx={{width: "100%"}}>
-            <Input
-                onChange={(event) => {
-                    props.onFilterChanged(props.columnDef.tableData.id, event.target.value);
-                }}
-                id="input-with-icon-adornment"
-                startAdornment={
-                    <InputAdornment position="start">
-                        <FilterListIcon />
-                    </InputAdornment>
-                }
-            />
-        </FormControl>
-    )
-}
-
-const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-})
-
-function padTo2Digits(num) {
-    return num.toString().padStart(2, '0');
-}
-
-function formatDate(date) {
-    return [
-        padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
-        date.getFullYear(),
-    ].join('/');
-}
-
 export const columns = [
     {title: "Affidavit No", field: "AFFIDAVITNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
     {title: "Policy No", field: "POLICYNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
@@ -73,6 +38,47 @@ export const columns = [
     {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {
             width: "10px",
             maxWidth: "calc(5px)"
-        }, cellStyle: {textAlign: "center"}, filterComponent: (props) => <CustomColumnFilter {...props} />},
+        }, cellStyle: {textAlign: "center"}, filterComponent: (props) => <CustomColumnFilter {...props} />
+       },
 
 ]
+
+const CustomColumnFilter = (props) => {
+    return (
+        <FormControl variant="standard" sx={{width: "100%"}}>
+            <Input
+                onChange={(event) => {
+                    props.onFilterChanged(props.columnDef.tableData.id, event.target.value);
+                }}
+                id="input-with-icon-adornment"
+                startAdornment={
+                    <InputAdornment position="start">
+                        <FilterListIcon />
+                    </InputAdornment>
+                }
+            />
+        </FormControl>
+    )
+}
+
+/////////  Column Helper Functions
+
+const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+})
+
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+    return [
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+        date.getFullYear(),
+    ].join('/');
+}
+
+
+
