@@ -147,6 +147,18 @@ export default function Table({showData}) {
         currency: "USD",
     })
 
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function formatDate(date) {
+        return [
+            padTo2Digits(date.getMonth() + 1),
+            padTo2Digits(date.getDate()),
+            date.getFullYear(),
+        ].join('/');
+    }
+
     const columns = [
         {title: "Affidavit No", field: "AFFIDAVITNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
         {title: "Policy No", field: "POLICYNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
@@ -166,18 +178,18 @@ export default function Table({showData}) {
 
         {title: "Inception", field: "EFFECTIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
             render: (rowData) => {
-                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
             }},
 
         {title: "Expiration", field: "EXPIRATIONDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
             render: (rowData) => {
-                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
             }},
 
         {title: "Batch", field: "BATCHID", type: "numeric", filterComponent: (props) => <CustomColumnFilter {...props} />},
         {title: "Submitted", field: "RECEIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
             render: (rowData) => {
-                return new Date(rowData.EFFECTIVEDATE).toLocaleDateString("en-us");
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
             }},
 
         {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {

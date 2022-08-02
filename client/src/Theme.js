@@ -195,13 +195,16 @@ const theme = createTheme({
             }
         },
         MuiTableSortLabel: {
+
             defaultProps: {
                 active: false,
             },
             styleOverrides: {
-
                 root: {
                     color: '#FFFFFF',
+                    "&.Mui-active": {
+                        color: '#FFFFFF',
+                    },
                     '&:hover': {
                         color: '#FFFFFF',
                     },
@@ -213,19 +216,21 @@ const theme = createTheme({
                     },
                     '&:after': {
                         color: '#FFFFFF',
-                    },
-                    "&:disabled": {
-                        color: '#FFFFFF',
                     }
                 },
-
+                active: {},
+                icon: {
+                    color: "inherit !important"
+                }
             },
         },
         MuiTableRow: {
             styleOverrides: {
                 root: {
                     whiteSpace: "nowrap",
-                }
+                },
+
+
             }
         },
         MuiTablePagination: {
