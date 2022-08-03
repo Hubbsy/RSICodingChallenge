@@ -3,11 +3,13 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import React from "react";
 
 export const columns = [
-    {title: "Affidavit No", field: "AFFIDAVITNO", headerStyle: {
-        width: "10px",
-        maxWidth: "calc(5px)",
-        whiteSpace: "nowrap"
-}, filterComponent: (props) => <CustomColumnFilter {...props} />},
+    {title: "Affidavit No", field: "AFFIDAVITNO",
+        headerStyle: {
+            width: "10px",
+            maxWidth: "calc(5px)",
+            whiteSpace: "nowrap"
+        }, filterComponent: (props) => <CustomColumnFilter {...props} />},
+
     {title: "Policy No", field: "POLICYNO", filterComponent: (props) => <CustomColumnFilter {...props} />},
     {title: "Insured Name", field: "RISKINSUREDNAME", headerStyle: {
             width: "300px",
@@ -26,23 +28,23 @@ export const columns = [
             return floatToDollarsConverter.format(rowData.AMOUNT)
         }, filterComponent: (props) => <CustomColumnFilter {...props} />},
 
-    {title: "Inception", field: "EFFECTIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+    {title: "Inception", field: "EFFECTIVEDATE", filterComponent: (props) => <CustomColumnFilter {...props} />,
         render: (rowData) => {
             return formatDate(new Date(rowData.EFFECTIVEDATE));
         }},
 
-    {title: "Expiration", field: "EXPIRATIONDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+    {title: "Expiration", field: "EXPIRATIONDATE", filterComponent: (props) => <CustomColumnFilter {...props} />,
         render: (rowData) => {
             return formatDate(new Date(rowData.EFFECTIVEDATE));
         }},
 
     {title: "Batch", field: "BATCHID", type: "numeric", align: "left", filterComponent: (props) => <CustomColumnFilter {...props} />},
-    {title: "Submitted", field: "RECEIVEDATE", format: "MM/dd/yyyy", filterComponent: (props) => <CustomColumnFilter {...props} />,
+    {title: "Submitted", field: "RECEIVEDATE", filterComponent: (props) => <CustomColumnFilter {...props} />,
         render: (rowData) => {
             return formatDate(new Date(rowData.EFFECTIVEDATE));
         }},
 
-    {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {textAlign: "center", paddingRight: 5, width: "calc(100% - 0px) / 5"}, cellStyle: {textAlign: "center"}, filterComponent: (props) => <CustomColumnFilter {...props} />
+    {title: "Proc State", field: "PROCESSEDSTATE", headerStyle: {textAlign: "center", paddingRight: 5}, cellStyle: {textAlign: "center"}, filterComponent: (props) => <CustomColumnFilter {...props} />
        },
 
 ]

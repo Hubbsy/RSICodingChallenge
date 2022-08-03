@@ -40,6 +40,10 @@ function getCompanyData(affidavitNo) {
             companyData.affidavitNo = transaction.AFFIDAVITNO
             companyData.coverage = transaction.COVERAGE;
             if (transaction.COMPANY && transaction.COMPANY.length) {
+                if (transaction.COMPANY[0].COMPANYNAME.includes("Company")) {
+                    // debugger
+                    transaction.COMPANY[0].COMPANYNAME = transaction.COMPANY[0].COMPANYNAME.replace("Company", "Co.")
+                }
                 companyData.CoName = transaction.COMPANY[0].COMPANYNAME;
                 companyData.CoNumber = transaction.COMPANY[0].COMPANYNUMBER;
             }

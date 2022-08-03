@@ -1,25 +1,29 @@
 import React, {useCallback, useState} from "react";
 
 import MaterialTable from "@material-table/core";
-import {CardHeader, CardContent, Typography} from "@mui/material";
-import {fields, getCompanyData} from "./tableDataManager";
-import {columns} from "./Columns";
+import {CardHeader, CardContent, Typography, styled} from "@mui/material";
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
 import {Popover, TablePagination, useTheme} from "@mui/material";
+
+import {fields, getCompanyData} from "./tableDataManager";
+import {columns} from "./Columns";
+import anchorPositionByAnchorEl from "./anchorTool";
 
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-import anchorPositionByAnchorEl from "./anchorTools";
 
 export default function Table({showData}) {
     const theme = useTheme();
 
+    const [tableSize, setTableSize] = useState("normal");
     const [selectedRow, setSelectedRow] = useState(null);
-    const [activeFilter, setActiveFilter] = useState(false);
+    const [activeTableFilters, setActiveTableFilters] = useState(false);
+    const [filterTooltip, setFilterTooltip] = useState("Show Filters");
     const [companyInfo, setCompanyInfo] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
+
     const popoverOpen = Boolean(anchorEl);
 
     const handleRowClick = (event, selectedRow) => {
@@ -41,13 +45,37 @@ export default function Table({showData}) {
 
     /////////// Actions array for table action icons
 
+    const StyledMoreVertIcon = styled(MoreVertIcon)(({theme}) => ({
+        height: 30,
+        width: 18,
+        color: "gray",
+        "&:active": {
+            height: 30,
+            width: 18,
+            borderRadius: "50%",
+            backgroundColor: theme.palette.grid.main.active,
+            padding: 0,
+            color: "gray"
+        },
+        "&:focus": {
+            height: 30,
+            width: 18,
+            borderRadius: "50%",
+            backgroundColor: theme.palette.grid.main.active,
+            padding: 0,
+            color: "gray"
+        }
+    }))
+
     const actions = [
         {
             icon: FilterListIcon,
-            tooltip: "Show Filters",
+            tooltip: filterTooltip,
             isFreeAction: true,
             onClick: (event, rowData) => {
-                setActiveFilter(!activeFilter);
+                setActiveTableFilters(!activeTableFilters);
+                let newTooltip = filterTooltip === "Show Filters" ? "Hide Filters" : "Show Filters";
+                setFilterTooltip(newTooltip);
             }
 
         },
@@ -56,13 +84,17 @@ export default function Table({showData}) {
             tooltip: "Toggle Density",
             isFreeAction: true,
             onClick: (event, rowData) => {
-                options.setTableProps(options);
+                // options.setTableProps(options);
+                setTableSize("small");
             }
 
         },
         {
-            icon: MoreVertIcon,
+            icon: () => <StyledMoreVertIcon/>,
             tooltip: 'Toggle Details',
+            sx: {
+              color: "text.secondary",
+            },
             onClick: (event, rowData) => {
                 handleRowClick(event, rowData)
                 handlePopoverOpen(event, rowData);
@@ -73,11 +105,12 @@ export default function Table({showData}) {
     /////////// Options object for table customization
 
     const options = {
-        setTableProps: (options) => {
+        setTableProps: () => {
             return {
-                size: 'small',
+                size: "small",
             };
         },
+        size: tableSize,
         pageSize: 10,
         showEmptyDataSourceMessage: true,
         actionsColumnIndex: -1,
@@ -105,7 +138,7 @@ export default function Table({showData}) {
             },
         ],
         columnsButton: true,
-        filtering: activeFilter,
+        filtering: activeTableFilters,
     }
 
     return (
@@ -154,7 +187,7 @@ export default function Table({showData}) {
                 />
                 <CardContent sx={{padding: "5px 15px 10px 15px !important"}}>
                     <Typography variant="subtitle2">Company(s):</Typography>
-                    <Typography sx={{ textTransform: "uppercase"}} variant="subtitle1">{`${companyInfo.CoNumber} - ${companyInfo.CoName}`}</Typography>
+                    <Typography sx={{ textTransform: "uppercase", paddingBottom: "5px"}} variant="subtitle1">{`${companyInfo.CoNumber} - ${companyInfo.CoName}`}</Typography>
                     <Typography variant="subtitle2">Coverage:</Typography>
                     <Typography sx={{ textTransform: "uppercase"}} variant="subtitle1">{companyInfo.coverage}</Typography>
                 </CardContent>

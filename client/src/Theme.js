@@ -187,6 +187,28 @@ const theme = createTheme({
                 arrow: true,
             },
         },
+        MuiList: {
+            styleOverrides: {
+                root: {
+                    padding: "8px 16px",
+                    borderRadius: "0px"
+                },
+
+            }
+        },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-disabled": {
+                        width: "auto",
+                        padding: "10px 5px",
+                        lineHeight: "132%",
+                        fontSize: "18px !important",
+                        color: "gray",
+                    }
+                }
+            }
+        },
         MuiFormControl: {
             styleOverrides: {
                 root: {
