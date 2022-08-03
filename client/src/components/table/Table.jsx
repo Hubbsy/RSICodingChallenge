@@ -1,10 +1,9 @@
 import React, {useCallback, useState} from "react";
+
 import MaterialTable from "@material-table/core";
-import {fields} from "./tableDataManager";
+import {CardHeader, CardContent, Typography} from "@mui/material";
+import {fields, getCompanyData} from "./tableDataManager";
 import {columns} from "./Columns";
-
-import anchorPositionByAnchorEl from "./anchorTools";
-
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
 import {Popover, TablePagination, useTheme} from "@mui/material";
 
@@ -12,11 +11,14 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
+import anchorPositionByAnchorEl from "./anchorTools";
+
 export default function Table({showData}) {
     const theme = useTheme();
 
     const [selectedRow, setSelectedRow] = useState(null);
     const [activeFilter, setActiveFilter] = useState(false);
+    const [companyInfo, setCompanyInfo] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const popoverOpen = Boolean(anchorEl);
 
@@ -26,10 +28,9 @@ export default function Table({showData}) {
 
     const handlePopoverOpen = useCallback(
         (event, data = null) => {
-            console.log(data)
+            setCompanyInfo(getCompanyData(data.AFFIDAVITNO));
             const anchorPosition = anchorPositionByAnchorEl(event);
             setAnchorEl(anchorPosition);
-
         },
         []
     );
@@ -139,15 +140,25 @@ export default function Table({showData}) {
                 }}
                 transformOrigin={{
                     vertical: "top",
-                    horizontal: "center"
+                    horizontal: "right"
                 }}
                 onClose={handlePopoverClose}
-                disableRestoreFocus
-
-            >
-                FUXKINFG YES!!!!!!
+                disableRestoreFocus >
+                <CardHeader
+                    title={<Typography variant="subtitle2">Affidavit No {companyInfo.affidavitNo}</Typography>}
+                    sx={{borderBottom: "solid lightgray 1px",
+                        backgroundColor: theme.palette.background.default,
+                        height: 5,
+                        padding: "20px 25px 20px 10px",
+                        whitespace: "nowrap"}}
+                />
+                <CardContent sx={{padding: "5px 15px 10px 15px !important"}}>
+                    <Typography variant="subtitle2">Company(s):</Typography>
+                    <Typography sx={{ textTransform: "uppercase"}} variant="subtitle1">{`${companyInfo.CoNumber} - ${companyInfo.CoName}`}</Typography>
+                    <Typography variant="subtitle2">Coverage:</Typography>
+                    <Typography sx={{ textTransform: "uppercase"}} variant="subtitle1">{companyInfo.coverage}</Typography>
+                </CardContent>
             </Popover>
         </>
-
     )
 }

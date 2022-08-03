@@ -134,7 +134,7 @@ const theme = createTheme({
         subtitle1: {
             fontFamily: 'Roboto',
             fontWeight: 400,
-            fontSize: '16px',
+            fontSize: '14px',
             lineHeight: '175%',
             letterSpacing: '0.15px',
             [`@media screen and (max-width: 1200px)`]:{
@@ -223,8 +223,6 @@ const theme = createTheme({
                 root: {
                     whiteSpace: "nowrap",
                 },
-
-
             }
         },
         MuiTablePagination: {

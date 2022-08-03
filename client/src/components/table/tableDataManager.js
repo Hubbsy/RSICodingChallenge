@@ -13,7 +13,7 @@ const tableFields = {
     "PROCESSEDSTATE":true,
 }
 
-export const fields = Data.map((record) => {
+const fields = Data.map((record) => {
     let transaction = record.PARTA_TRANSACTION;
     let mappedData = {};
     for (let key in transaction) {
@@ -30,3 +30,25 @@ export const fields = Data.map((record) => {
 
     return mappedData
 });
+
+function getCompanyData(affidavitNo) {
+    let companyData = {};
+    for (let i = 0; i < Data.length; i++) {
+        let transaction = Data[i].PARTA_TRANSACTION;
+
+        if (transaction.AFFIDAVITNO === affidavitNo) {
+            companyData.affidavitNo = transaction.AFFIDAVITNO
+            companyData.coverage = transaction.COVERAGE;
+            if (transaction.COMPANY && transaction.COMPANY.length) {
+                companyData.CoName = transaction.COMPANY[0].COMPANYNAME;
+                companyData.CoNumber = transaction.COMPANY[0].COMPANYNUMBER;
+            }
+
+            return companyData;
+        }
+    }
+
+    return companyData;
+}
+
+export {fields, getCompanyData}
