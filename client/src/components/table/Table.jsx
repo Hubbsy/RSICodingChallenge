@@ -1,12 +1,19 @@
 import React, {useCallback, useState} from "react";
 
 import MaterialTable from "@material-table/core";
-import {CardHeader, CardContent, Typography, styled} from "@mui/material";
+import {
+    CardHeader,
+    CardContent,
+    Typography,
+    styled,
+    FormControl,
+    Input,
+    InputAdornment
+} from "@mui/material";
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
 import {Popover, TablePagination, useTheme} from "@mui/material";
 
 import {fields, getCompanyData} from "./tableDataManager";
-import {columns} from "./Columns";
 import anchorPositionByAnchorEl from "./anchorTool";
 
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -45,28 +52,6 @@ export default function Table({showData}) {
 
     /////////// Actions array for table action icons
 
-    const StyledMoreVertIcon = styled(MoreVertIcon)(({theme}) => ({
-        height: 30,
-        width: 18,
-        color: "gray",
-        "&:active": {
-            height: 30,
-            width: 18,
-            borderRadius: "50%",
-            backgroundColor: theme.palette.grid.main.active,
-            padding: 0,
-            color: "gray"
-        },
-        "&:focus": {
-            height: 30,
-            width: 18,
-            borderRadius: "50%",
-            backgroundColor: theme.palette.grid.main.active,
-            padding: 0,
-            color: "gray"
-        }
-    }))
-
     const actions = [
         {
             icon: FilterListIcon,
@@ -88,19 +73,156 @@ export default function Table({showData}) {
                 setTableSize("small");
             }
 
-        },
-        {
-            icon: () => <StyledMoreVertIcon/>,
-            tooltip: 'Toggle Details',
-            sx: {
-              color: "text.secondary",
-            },
-            onClick: (event, rowData) => {
-                handleRowClick(event, rowData)
-                handlePopoverOpen(event, rowData);
-            }
         }
     ];
+
+    const columns = [
+        {
+            title: "Affidavit No",
+            field: "AFFIDAVITNO",
+            filterComponent: (props) => <CustomColumnFilter {...props} />},
+
+        {
+            title: "Policy No",
+            field: "POLICYNO",
+            filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {
+            title: "Insured Name",
+            field: "RISKINSUREDNAME",
+            filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                let shortenedName = rowData.RISKINSUREDNAME;
+                if (rowData.RISKINSUREDNAME.length > 25) {
+                    shortenedName = `${shortenedName.slice(0, 23)} ...`
+                }
+                return shortenedName
+            }},
+
+        {
+            title: "Type",
+            field: "TRANSACTIONTYPE",
+            filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {
+            title: "Premium",
+            field: "AMOUNT",
+            type: "currency",
+            align: "left",
+            render: (rowData) => {
+                return floatToDollarsConverter.format(rowData.AMOUNT)
+            }, filterComponent: (props) => <CustomColumnFilter {...props} />},
+
+        {
+            title: "Inception",
+            field: "EFFECTIVEDATE",
+            filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
+            }},
+
+        {
+            title: "Expiration",
+            field: "EXPIRATIONDATE",
+            filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
+            }},
+
+        {
+            title: "Batch",
+            field: "BATCHID",
+            type: "numeric",
+            align: "left",
+            filterComponent: (props) => <CustomColumnFilter {...props} />},
+        {
+            title: "Submitted",
+            field: "RECEIVEDATE",
+            filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return formatDate(new Date(rowData.EFFECTIVEDATE));
+            }},
+
+        {
+            title: "Proc State",
+            field: "PROCESSEDSTATE",
+            headerStyle: {
+                textAlign: "center",
+                justifyContent: "center",
+            },
+            cellStyle: {
+                textAlign: "center",
+            },
+            align: "center",
+            filterComponent: (props) => <CustomColumnFilter {...props} />,
+            render: (rowData) => {
+                return <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <span style={{display: "flex", width: "50%"}}>{rowData.PROCESSEDSTATE}</span>
+                    <StyledMoreVertIcon onClick={event => handlePopoverOpen(event, rowData)}/>
+                </div>
+
+            }
+        },
+
+    ]
+
+    const StyledMoreVertIcon = styled(MoreVertIcon)(({theme}) => ({
+        height: 30,
+        width: 18,
+        display: "flex",
+        color: "gray",
+        "&:active": {
+            height: 30,
+            width: 18,
+            borderRadius: "50%",
+            backgroundColor: theme.palette.grid.main.active,
+            padding: 0,
+            color: "gray"
+        },
+        "&:focus": {
+            height: 30,
+            width: 18,
+            borderRadius: "50%",
+            backgroundColor: theme.palette.grid.main.active,
+            padding: 0,
+            color: "gray"
+        }
+    }))
+
+    const CustomColumnFilter = (props) => {
+        return (
+            <FormControl variant="standard" sx={{width: "100%"}}>
+                <Input
+                    onChange={(event) => {
+                        props.onFilterChanged(props.columnDef.tableData.id, event.target.value);
+                    }}
+                    id="input-with-icon-adornment"
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <FilterListIcon />
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
+        )
+    }
+
+    /////////  Column Helper Functions
+
+    const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    })
+
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function formatDate(date) {
+        return [
+            padTo2Digits(date.getMonth() + 1),
+            padTo2Digits(date.getDate()),
+            date.getFullYear(),
+        ].join('/');
+    }
 
     /////////// Options object for table customization
 
@@ -158,10 +280,11 @@ export default function Table({showData}) {
                                         rowsPerPage={props.rowsPerPage}
                                         rowsPerPageOptions={[10, 25, 50, 100]}
                                         onRowsPerPageChange={props.onRowsPerPageChange}
-                                    />
+                                    />,
                            }}
 
             />
+            {/*Popover used on row icon click for company info based on row data*/}
             <Popover
                 id="descriptionPopover"
                 open={popoverOpen}
