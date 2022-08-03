@@ -10,16 +10,17 @@ import {
     Input,
     InputAdornment
 } from "@mui/material";
+
 import { ExportCsv, ExportPdf } from "@material-table/exporters";
 import {Popover, TablePagination, useTheme} from "@mui/material";
 
 import {fields, getCompanyData} from "./tableDataManager";
 import anchorPositionByAnchorEl from "./anchorTool";
+import {floatToDollarsConverter, formatDate} from "./columnHelpers"
 
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-
 
 export default function Table({showData}) {
     const theme = useTheme();
@@ -75,6 +76,8 @@ export default function Table({showData}) {
 
         }
     ];
+
+    /////////// Columns array for columns rendering
 
     const columns = [
         {
@@ -145,8 +148,8 @@ export default function Table({showData}) {
             title: "Proc State",
             field: "PROCESSEDSTATE",
             headerStyle: {
-                textAlign: "center",
-                justifyContent: "center",
+                textAlign: "left",
+                whiteSpace: "break-spaces"
             },
             cellStyle: {
                 textAlign: "center",
@@ -156,9 +159,8 @@ export default function Table({showData}) {
             render: (rowData) => {
                 return <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <span style={{display: "flex", width: "50%"}}>{rowData.PROCESSEDSTATE}</span>
-                    <StyledMoreVertIcon onClick={event => handlePopoverOpen(event, rowData)}/>
+                    <StyledMoreVertIcon  onClick={event => handlePopoverOpen(event, rowData)}/>
                 </div>
-
             }
         },
 
@@ -184,7 +186,7 @@ export default function Table({showData}) {
             backgroundColor: theme.palette.grid.main.active,
             padding: 0,
             color: "gray"
-        }
+        },
     }))
 
     const CustomColumnFilter = (props) => {
@@ -205,24 +207,6 @@ export default function Table({showData}) {
         )
     }
 
-    /////////  Column Helper Functions
-
-    const floatToDollarsConverter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    })
-
-    function padTo2Digits(num) {
-        return num.toString().padStart(2, '0');
-    }
-
-    function formatDate(date) {
-        return [
-            padTo2Digits(date.getMonth() + 1),
-            padTo2Digits(date.getDate()),
-            date.getFullYear(),
-        ].join('/');
-    }
 
     /////////// Options object for table customization
 
@@ -240,7 +224,7 @@ export default function Table({showData}) {
             backgroundColor:  theme.palette.grid.main.header,
             color: theme.palette.background.paper,
             textTransform: "capitalize",
-            padding: 15,
+            // padding: 15,
         },
         rowStyle: (rowData) => ({
             backgroundColor:
@@ -285,6 +269,7 @@ export default function Table({showData}) {
 
             />
             {/*Popover used on row icon click for company info based on row data*/}
+
             <Popover
                 id="descriptionPopover"
                 open={popoverOpen}
