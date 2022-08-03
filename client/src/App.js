@@ -1,13 +1,33 @@
 import { ThemeProvider } from '@mui/material/styles';
-import { Typography } from '@mui/material';
+import {CssBaseline} from "@mui/material";
+import {Stack} from '@mui/material';
 import theme from './Theme';
 
+import Navbar from "./components/Navbar";
+import MainSearch from "./components/MainSearch";
+import Table from "./components/table/Table";
+import {useState} from "react";
+
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Typography variant="h6">RSI Coding Challenge</Typography>
-    </ThemeProvider>
-  );
+    const [showData, setShowData] = useState(false);
+
+
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+          <Stack sx={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: theme.palette.background.default,
+              padding: "20px"
+          }} spacing={2}>
+
+            <Navbar />
+            <MainSearch setShowData={setShowData} />
+            <Table showData={showData}/>
+          </Stack>
+        </ThemeProvider>
+    );
 }
 
 export default App;

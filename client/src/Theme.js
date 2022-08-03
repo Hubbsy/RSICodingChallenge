@@ -134,7 +134,7 @@ const theme = createTheme({
         subtitle1: {
             fontFamily: 'Roboto',
             fontWeight: 400,
-            fontSize: '16px',
+            fontSize: '14px',
             lineHeight: '175%',
             letterSpacing: '0.15px',
             [`@media screen and (max-width: 1200px)`]:{
@@ -175,7 +175,106 @@ const theme = createTheme({
     },
     transitions: {},
     zIndex: {},
-    components: {}
+    components: {
+        MuiToolbar: {
+            defaultProps: {
+                disableGutters: true,
+            }
+        },
+        MuiTooltip: {
+            defaultProps: {
+                placement: "top",
+                arrow: true,
+            },
+        },
+        MuiList: {
+            styleOverrides: {
+                root: {
+                    padding: "8px 16px",
+                    borderRadius: "0px"
+                },
+
+            }
+        },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-disabled": {
+                        width: "auto",
+                        padding: "10px 5px",
+                        lineHeight: "132%",
+                        fontSize: "18px !important",
+                        color: "gray",
+                    }
+                }
+            }
+        },
+        MuiFormControl: {
+            styleOverrides: {
+                root: {
+                    width: "30%"
+                }
+            }
+        },
+        MuiTableSortLabel: {
+
+            defaultProps: {
+                active: false,
+            },
+            styleOverrides: {
+                root: {
+                    color: '#FFFFFF',
+                    "&.Mui-active": {
+                        color: '#FFFFFF',
+                    },
+                    '&:hover': {
+                        color: '#FFFFFF',
+                    },
+                    '&:focus': {
+                        color: '#FFFFFF',
+                    },
+                },
+                active: {},
+                icon: {
+                    color: "inherit !important"
+                }
+            },
+        },
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    whiteSpace: "nowrap",
+                },
+            }
+        },
+        MuiTablePagination: {
+            styleOverrides: {
+                select: {
+                    padding: 0,
+                },
+                selectLabel: {
+                    textTransform: "capitalize",
+                    fontFamily: 'Roboto',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    lineHeight: '166%',
+                    letterSpacing: '0.4px',
+                    color: "gray"
+                },
+                selectIcon: {
+                    paddingBottom: 5,
+                },
+                displayedRows: {
+                    textTransform: "lowercase",
+                    fontFamily: 'Roboto',
+                    fontWeight: 400,
+                    fontSize: '10px',
+                    lineHeight: '166%',
+                    letterSpacing: '0.4px',
+                }
+            }
+        },
+    }
 })
 
 export default theme;
