@@ -70,10 +70,9 @@ export default function Table({showData}) {
             tooltip: "Toggle Density",
             isFreeAction: true,
             onClick: (event, rowData) => {
-                // options.setTableProps(options);
+                options.setTableProps(options);
                 setTableSize("small");
             }
-
         }
     ];
 
@@ -108,8 +107,8 @@ export default function Table({showData}) {
         {
             title: "Premium",
             field: "AMOUNT",
-            type: "currency",
             align: "left",
+            customSort: (a, b) => parseFloat(a.AMOUNT.replace(",", ".")) - parseFloat(b.AMOUNT.replace(",", ".")),
             render: (rowData) => {
                 return floatToDollarsConverter.format(rowData.AMOUNT)
             }, filterComponent: (props) => <CustomColumnFilter {...props} />},
@@ -149,7 +148,8 @@ export default function Table({showData}) {
             field: "PROCESSEDSTATE",
             headerStyle: {
                 textAlign: "left",
-                whiteSpace: "break-spaces"
+                whiteSpace: "break-spaces",
+                marginRight: "20px"
             },
             cellStyle: {
                 textAlign: "center",
@@ -224,7 +224,6 @@ export default function Table({showData}) {
             backgroundColor:  theme.palette.grid.main.header,
             color: theme.palette.background.paper,
             textTransform: "capitalize",
-            // padding: 15,
         },
         rowStyle: (rowData) => ({
             backgroundColor:
