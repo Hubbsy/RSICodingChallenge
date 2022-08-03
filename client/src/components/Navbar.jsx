@@ -14,7 +14,7 @@ export default function Navbar() {
                 <Breadcrumbs aria-label="breadcrumb">
                     <Link
                         underline="hover"
-                        sx={{ display: 'flex', alignItems: 'center' }}
+                        sx={{ display: 'flex', alignItems: 'center', fontSize: "20px" }}
                         color="inherit"
                         href="/"
                     >
